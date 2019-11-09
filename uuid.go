@@ -6,8 +6,8 @@ import (
 )
 
 func GenerateV4(u *[16]byte) {
-	rand.Read(u[:])
-	u[7] = (u[7] & 0x0f) | 0x40
+	_, _ = rand.Read(u[:])
+	u[6] = (u[6] & 0x0f) | 0x40
 	u[8] = (u[8] & 0x3f) | 0x80
 }
 
@@ -36,8 +36,6 @@ func Format(u *[16]byte) string {
 	hexOctet(s, 24, u, 10)
 	hexOctet(s, 28, u, 12)
 	hexOctet(s, 32, u, 14)
-	var hack [2]uintptr
-	hack[0] = uintptr(unsafe.Pointer(s))
-	hack[1] = 36
+	hack := s[:]
 	return *(*string)(unsafe.Pointer(&hack))
 }
